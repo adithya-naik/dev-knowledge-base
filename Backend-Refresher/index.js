@@ -27,9 +27,10 @@ app.get("/",(req,res)=>{
   // res.send("<h1>Hello</h1>")
   res.json({name:"Adithya"})
 })
-app.post("/",(req,res)=>{
+app.get("/html",(req,res)=>{
   // res.send("Its Home Page")
-  res.send("<h1>Hello</h1>")
+  res.send("<h1>Hello</h1>") 
+  // This is called server side rendering and its fast - but it cant run on mobile application because its not a browser, so we use REST API and send the data by json, so we can use it anywhere mobile ap, website or anhything independent of browser 
   // res.json({name:"Adithya"})
 })
 app.get("/about",(req,res)=>{

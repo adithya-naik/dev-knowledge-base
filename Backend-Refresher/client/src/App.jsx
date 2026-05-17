@@ -31,9 +31,9 @@ const App = () => {
   // Post Method
   async function handleSubmit() {
     try {
-      const result = await axios.post(`${SERVER_URL}/createUser`, userData);
+      const result = await axios.post(`${SERVER_URL}/api/users/createUser`, userData);
       // OR
-      // const result = await axios.post(`${SERVER_URL}/createUser`, {
+      // const result =  await axios.post(`${SERVER_URL}//api/users/createUser`, {
       //   name: userData.name,
       //   age: userData.age,
       //   email: userData.email,
@@ -53,7 +53,7 @@ const App = () => {
       <button onClick={() => handleClick()}>Send</button>
 
       <div>
-        <p>This posts data to "/" route : </p>
+        <p>This posts data to "/api/users/createUser route : </p>
         <input
           type="text"
           placeholder="name"

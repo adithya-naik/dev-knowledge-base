@@ -2,11 +2,12 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 const App = () => {
-  const SERVER_URL = "http://localhost:8000/";
+  const SERVER_URL = "http://localhost:8000";
   const [userData, setUserData] = useState({
     name: "",
     age: "",
-    city: "",
+    email: "",
+    username:""
   });
 
   // Get Method
@@ -30,11 +31,14 @@ const App = () => {
   // Post Method
   async function handleSubmit() {
     try {
-      const result = await axios.post(`${SERVER_URL}`, {
-        name: userData.name,
-        age: userData.age,
-        city: userData.city,
-      });
+      const result = await axios.post(`${SERVER_URL}/createUser`, userData);
+      // OR
+      // const result = await axios.post(`${SERVER_URL}/createUser`, {
+      //   name: userData.name,
+      //   age: userData.age,
+      //   email: userData.email,
+      //   username : userData.username,
+      // });
       // access the data from .data
       console.log("From Server result: ", result);
       console.log("From Server data : ", result.data);
@@ -66,9 +70,15 @@ const App = () => {
 
         <input
           type="text"
-          placeholder="city"
-          value={userData.city}
-          onChange={(e) => setUserData({ ...userData, city: e.target.value })}
+          placeholder="email"
+          value={userData.email}
+          onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="username"
+          value={userData.username}
+          onChange={(e) => setUserData({ ...userData, username: e.target.value })}
         />
         <button onClick={() => handleSubmit()}>Submit</button>
       </div>

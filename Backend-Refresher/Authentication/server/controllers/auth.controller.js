@@ -16,7 +16,7 @@ export const signUp = async (req, res) => {
       return res.status(400).json({ success: false, msg: "User already Exists" })
     }
 
-    const hashPassword = await bcrypt.hash(password, 10,)
+    const hashPassword = await bcrypt.hash(password, 10)
 
     const newUser = await User.create({ firstName, lastName, userName, email, password: hashPassword })
     const token = generateToken(newUser._id)
@@ -50,5 +50,61 @@ export const signUp = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json({ success: false })
+  }
+}
+
+export const Login = async (req, res) => {
+  try {
+    const { email, password } = req.body
+    let existingUser = await User.findOne({ email })
+
+    if (!existingUser) {
+      return res.status(400).json({
+        success: false, msg: "No User found"
+      })
+    }
+
+    let match = await bcrypt.compare(password, existingUser.password)
+
+    if (!match) {
+      return res.status(400).json({
+        success: false, msg: "Credentials Invalid !"
+      })
+    }
+
+    const token = generateToken(existingUser._id)
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV == "dev" ? false : true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    })
+
+    res.status(200).json({
+      status: true,
+      msg: "User Logged in  Successfully",
+      user: {
+        firstName: existingUser.firstName, lastName: existingUser.lastName, userName: existingUser.userName, email: existingUser.email
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false })
+
+  }
+}
+
+export const Logout = async (req, res) => {
+  try {
+    res.clearCookie("token")
+    res.status(200).json({
+      success:true,
+      msg:"Logged out successfully"
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false })
+
   }
 }
